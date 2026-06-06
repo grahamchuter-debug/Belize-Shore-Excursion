@@ -1,0 +1,14 @@
+{
+  "name": "belize-shore-excursion",
+  "private": true,
+  "scripts": {
+    "build": "python3 scripts/build-belize-site.py",
+    "images": "python3 scripts/fetch-belize-images.py",
+    "check": "python3 scripts/check-belize-site.py",
+    "deploy": "wrangler deploy",
+    "preview": "python3 -m http.server 8908"
+  },
+  "devDependencies": {
+    "wrangler": "^4.94.0"
+  }
+}

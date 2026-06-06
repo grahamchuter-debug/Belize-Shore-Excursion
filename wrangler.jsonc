@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "belize-shore-excursion",
+  "compatibility_date": "2026-06-06",
+  "observability": { "enabled": true },
+  "assets": { "directory": "." },
+  "routes": [
+    {
+      "pattern": "belizeshoreexcursion.com",
+      "custom_domain": true
+    }
+  ]
+}

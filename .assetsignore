@@ -1,0 +1,24 @@
+# Keep Worker asset uploads lean — never publish tooling, quarantine, or JS-shell leftovers
+node_modules/
+.wrangler/
+.git/
+quarantine/
+scripts/
+content/
+partials/
+docs/
+package-lock.json
+package.json
+*.md
+!images/ATTRIBUTION.md
+.dev.vars
+.env
+.env.*
+.DS_Store
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+js/site.js
+js/tailwind-config.js
+deploy.sh

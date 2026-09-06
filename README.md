@@ -1,23 +1,10 @@
-# Belize Shore Excursion
+# Belize Shore Excursion (World 2.0)
 
-Cruise-passenger planning guide for Belize City, Belize shore excursions.
+Independent cruise-passenger planning guide for Belize City shore excursions.
 
-## Development
+- Canonical host: `https://belizeshoreexcursion.com` (apex + `.html`)
+- Build: `npm run build` (Python static assembly)
+- QA: `npm run check`
+- Deploy: `npm run deploy` (Cloudflare Workers Static Assets)
 
-```bash
-npm install
-npm run build
-npm run images
-npm run check
-npm run preview
-```
-
-Open http://localhost:8908 (requires local server for partial loading).
-
-## Deploy to Cloudflare
-
-```bash
-npm run build && npm run images && npm run check && ./deploy.sh
-```
-
-Domain: https://belizeshoreexcursion.com
+Not affiliated with any cruise line. Commercial booking activation is deferred (Phase 13C).

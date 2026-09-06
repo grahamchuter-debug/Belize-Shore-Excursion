@@ -1,507 +1,437 @@
 #!/usr/bin/env python3
-"""Generate Belize Shore Excursion static site files."""
+"""Build fully assembled static HTML for Belize Shore Excursion (World 2.0 / Phase 13B)."""
+from __future__ import annotations
+
+import json
+import sys
 from pathlib import Path
 
-from belize_config import (
-    ACCENT,
-    ALL_IMAGES,
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from belize_config import (  # noqa: E402
     BEST_ALT,
     BEST_IMG,
-    CATEGORY_IMAGES,
-    DATE,
     DOMAIN,
+    EMAIL,
     FAQ_ALT,
     FAQ_IMG,
-    HERO_GRADIENT,
     HOME_HERO,
     HOME_HERO_ALT,
-    INTRO_ALT,
-    INTRO_IMG,
     ONE_DAY_ALT,
     ONE_DAY_IMG,
-    PLACEHOLDER_PNG,
     PORT_ALT,
     PORT_IMG,
-    PORT_ARRIVAL_ALT,
-    PORT_ARRIVAL_IMG,
     PRIVATE_ALT,
     PRIVATE_IMG,
-    ROOT,
     RUINS_ALT,
     RUINS_IMG,
     SITE,
+    SLUG_IMAGES,
     SNORKEL_ALT,
     SNORKEL_IMG,
+    CATEGORY_IMAGES,
+    INTRO_IMG,
+    INTRO_ALT,
 )
-from belize_guides import all_guide_content, home_faq_data
-from belize_helpers import hero_inner, hero_wave, home_schema, page_shell, tourist_trip_schema
-from belize_tours import all_tour_content
-from belize_tours_data import SITEMAP_PAGES, TOURS
+from belize_pages import (  # noqa: E402
+    faq_body,
+    faq_schema_entities,
+    home_body,
+    hub_best_body,
+    hub_mayan_body,
+    hub_private_body,
+    hub_snorkel_body,
+    not_found_body,
+    one_day_body,
+    port_guide_body,
+    product_body,
+    trust_about_body,
+    trust_contact_body,
+    trust_methodology_body,
+    trust_privacy_body,
+    trust_terms_body,
+)
+
+from belize_shell import hero_home, hero_page, page_shell  # noqa: E402
+from belize_tours_data import TOURS  # noqa: E402
+
+MANIFEST = json.loads((ROOT / "scripts" / "protected_routes.json").read_text(encoding="utf-8"))
+PRIORITY_BY_SLUG = {
+    r["file"].removesuffix(".html"): r.get("priority", "B")
+    for r in MANIFEST["routes"]
+    if r.get("kind") == "product"
+}
 
 
-def write(path: str, content: str) -> None:
-    p = ROOT / path
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(content, encoding="utf-8")
-    print(f"  wrote {path}")
+def write(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    print(f"  wrote {path.relative_to(ROOT)}")
 
 
-def hero_home() -> str:
-    return f"""  <section class="site-hero">
-    <div class="absolute inset-0 hero-bg" style="background-image: {HERO_GRADIENT}, url('{HOME_HERO}');" role="img" aria-label="{HOME_HERO_ALT}"></div>
-    <div class="site-hero__inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl">
-        <div class="site-hero__eyebrow inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 rounded-full px-4 py-1.5 mb-3">
-          <span class="w-2 h-2 rounded-full bg-pr-400 animate-pulse"></span>
-          <span class="text-white/90 text-xs font-semibold tracking-widest uppercase">Belize City · Tender Port</span>
-        </div>
-        <h1 class="site-hero__title text-4xl sm:text-5xl lg:text-[3.25rem] font-display font-bold text-white leading-tight mb-3">
-          Belize Shore<br/><span class="{ACCENT}">Excursions</span><br/>from the Cruise Port
-        </h1>
-        <p class="site-hero__lead text-base sm:text-lg text-white/85 font-light leading-relaxed mb-5 max-w-2xl">
-          Cave tubing, Mayan ruins, barrier reef snorkelling and beach breaks — the shore excursions cruise passengers book most from Belize City, Belize.
-        </p>
-        <div class="site-hero__actions flex flex-col sm:flex-row gap-3">
-          <a href="best-belize-shore-excursions.html" class="btn-primary inline-flex items-center justify-center gap-2 text-white font-semibold px-7 py-3 rounded-full text-sm shadow-xl">Compare Excursions</a>
-          <a href="belize-cave-tubing.html" class="btn-outline inline-flex items-center justify-center gap-2 text-white font-semibold px-7 py-3 rounded-full text-sm">Cave Tubing</a>
-        </div>
-        <div class="site-hero__tags flex flex-wrap gap-2 mt-5 pt-4 border-t border-white/20">
-          <span class="inline-flex items-center bg-white/10 border border-white/25 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white">Cave Tubing</span>
-          <span class="inline-flex items-center bg-white/10 border border-white/25 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white">Altun Ha</span>
-          <span class="inline-flex items-center bg-white/10 border border-white/25 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white">Barrier Reef</span>
-          <span class="inline-flex items-center bg-white/10 border border-white/25 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white">Cruise Passengers</span>
-          <span class="inline-flex items-center bg-white/10 border border-white/25 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white">BZD &amp; USD</span>
-        </div>
-      </div>
-    </div>
-    {hero_wave()}
-  </section>"""
+def org_graph() -> list:
+    return [
+        {
+            "@type": "WebSite",
+            "name": SITE,
+            "url": f"{DOMAIN}/",
+            "description": "Cruise-focused Belize shore excursion information and independent destination advice.",
+            "inLanguage": "en",
+            "publisher": {"@type": "Organization", "name": SITE, "url": f"{DOMAIN}/", "email": EMAIL},
+        },
+        {
+            "@type": "Organization",
+            "name": SITE,
+            "url": f"{DOMAIN}/",
+            "email": EMAIL,
+            "description": (
+                f"{SITE} provides cruise-focused excursion information and independent "
+                "destination advice for passengers visiting Belize City. Not affiliated with any cruise line."
+            ),
+        },
+    ]
 
 
-def tour_hero(tour: dict) -> str:
-    img, alt = CATEGORY_IMAGES.get(tour["category"], (INTRO_IMG, INTRO_ALT))
-    title_parts = tour["title"].replace(" and ", " &amp; ").split(" ", 2)
-    if len(title_parts) >= 2:
-        h1 = f"{title_parts[0]}<br/><span class=\"{ACCENT}\">{title_parts[1]}</span>"
-        if len(title_parts) > 2:
-            h1 += f"<br/>{title_parts[2]}"
-    else:
-        h1 = tour["title"]
-    return hero_inner(
-        f"{tour['duration']} · {tour['activity']}",
-        h1,
-        f"{tour['seg_desc']} Shore excursion for Belize cruise passengers with port pickup and return-to-ship timing.",
-        img,
-        f"{tour['title']} Belize shore excursion hero image for cruise passengers from Belize City port",
-        breadcrumb=tour["title"],
+def build_home() -> None:
+    schema = org_graph()
+    html = page_shell(
+        title="Belize Shore Excursion | Cave Tubing, Ruins & Reef from Belize City",
+        description=(
+            "Plan Belize shore excursions for cruise passengers — cave tubing, Altun Ha, "
+            "barrier reef snorkelling and beach breaks from Belize City's tender port."
+        ),
+        canonical="/",
+        og_image=HOME_HERO,
+        nav_key="home",
+        hero=hero_home(),
+        body=home_body(),
+        schema=schema,
+        preload=HOME_HERO,
+    )
+    write(ROOT / "index.html", html)
+
+
+def build_hub(
+    *,
+    file: str,
+    title: str,
+    description: str,
+    nav_key: str,
+    hero_title: str,
+    lead: str,
+    image: str,
+    alt: str,
+    crumb: str,
+    body: str,
+    cta_href: str,
+) -> None:
+    html = page_shell(
+        title=title,
+        description=description,
+        canonical=f"/{file}",
+        og_image=image,
+        nav_key=nav_key,
+        hero=hero_page(
+            title=hero_title,
+            lead=lead,
+            image=image,
+            alt=alt,
+            crumb=crumb,
+            cta_href=cta_href,
+            cta_label="Explore guides",
+        ),
+        body=body,
+        schema=org_graph(),
+    )
+    write(ROOT / file, html)
+
+
+def build_planning_pages() -> None:
+    build_hub(
+        file="best-belize-shore-excursions.html",
+        title="Best Belize Shore Excursions | Compare Cruise Day Options",
+        description="Compare Belize shore excursion themes for cruise passengers — cave tubing, Mayan ruins, reef snorkel, wildlife and private touring from Belize City.",
+        nav_key="excursions",
+        hero_title="Best Belize Shore Excursions for Cruise Guests",
+        lead="A comparison hub for cruise-day themes from Belize City's tender port — not a popularity ranking.",
+        image=BEST_IMG,
+        alt=BEST_ALT,
+        crumb="Best excursions",
+        body=hub_best_body(TOURS),
+        cta_href="/belize-cruise-port-guide.html",
+    )
+    build_hub(
+        file="belize-mayan-ruins-excursions.html",
+        title="Belize Mayan Ruins Excursions | Altun Ha, Lamanai & More",
+        description="Plan Mayan ruins shore excursions from Belize City — Altun Ha, Lamanai, Cahal Pech and combo days that fit a cruise tender schedule.",
+        nav_key="ruins",
+        hero_title="Belize Mayan Ruins Excursions",
+        lead="Temple days inland from the tender pier — from compact Altun Ha visits to river-access Lamanai.",
+        image=RUINS_IMG,
+        alt=RUINS_ALT,
+        crumb="Mayan ruins",
+        body=hub_mayan_body(TOURS),
+        cta_href="/best-belize-shore-excursions.html",
+    )
+    build_hub(
+        file="belize-snorkeling-and-beach-excursions.html",
+        title="Belize Snorkeling and Beach Excursions | Reef & Island Days",
+        description="Plan Belize Barrier Reef snorkel and beach break shore excursions from Belize City — Caye Caulker, Shark Ray Alley and island time for cruise guests.",
+        nav_key="snorkel",
+        hero_title="Belize Snorkeling and Beach Excursions",
+        lead="Boat days toward reef and island shoreline when you want Caribbean water over inland roads.",
+        image=SNORKEL_IMG,
+        alt=SNORKEL_ALT,
+        crumb="Snorkel &amp; beach",
+        body=hub_snorkel_body(TOURS),
+        cta_href="/best-belize-shore-excursions.html",
+    )
+    build_hub(
+        file="belize-private-tours.html",
+        title="Belize Private Tours | Flexible Cruise Shore Excursions",
+        description="Explore private Belize shore excursion formats for cruise passengers — private cave tubing and tailored pacing from Belize City's tender port.",
+        nav_key="private",
+        hero_title="Belize Private Tours for Cruise Guests",
+        lead="Editorial guides to private-format days when your group wants more control over pace and stops.",
+        image=PRIVATE_IMG,
+        alt=PRIVATE_ALT,
+        crumb="Private tours",
+        body=hub_private_body(TOURS),
+        cta_href="/best-belize-shore-excursions.html",
+    )
+    build_hub(
+        file="belize-cruise-port-guide.html",
+        title="Belize Cruise Port Guide | Tender Port & Fort Street Village",
+        description="Belize City cruise port guide for tender arrivals at Fort Street Tourism Village — timing, transfers and how shore days usually work.",
+        nav_key="port",
+        hero_title="Belize Cruise Port Guide",
+        lead="Ships anchor offshore; passengers tender to Fort Street Tourism Village on a typical six-to-ten-hour call.",
+        image=PORT_IMG,
+        alt=PORT_ALT,
+        crumb="Port guide",
+        body=port_guide_body(),
+        cta_href="/one-day-in-belize-from-a-cruise-ship.html",
+    )
+    build_hub(
+        file="one-day-in-belize-from-a-cruise-ship.html",
+        title="One Day in Belize from a Cruise Ship | Port Day Planning",
+        description="Plan one day in Belize from a cruise ship — how to choose between cave tubing, ruins, reef and city options within a tender port window.",
+        nav_key="one-day",
+        hero_title="One Day in Belize from a Cruise Ship",
+        lead="A practical way to choose one coherent theme for a Belize City tender day.",
+        image=ONE_DAY_IMG,
+        alt=ONE_DAY_ALT,
+        crumb="One day in Belize",
+        body=one_day_body(),
+        cta_href="/best-belize-shore-excursions.html",
     )
 
-
-def nav_html() -> str:
-    return f"""<nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 border-b border-pr-100 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-12">
-      <a href="index.html" class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full btn-ocean flex items-center justify-center">
-          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
-          </svg>
-        </div>
-        <span class="font-display font-semibold text-ocean-800 text-base leading-tight">Belize Shore<br/><span class="text-[10px] font-body font-normal text-pr-600 tracking-widest uppercase">Excursion</span></span>
-      </a>
-      <div class="hidden lg:flex items-center gap-5 text-sm font-medium">
-        <a href="index.html" data-nav="home" class="text-gray-600 hover:text-ocean-600 transition-colors">Home</a>
-        <a href="best-belize-shore-excursions.html" data-nav="excursions" class="text-gray-600 hover:text-ocean-600 transition-colors">Excursions</a>
-        <a href="belize-mayan-ruins-excursions.html" data-nav="ruins" class="text-gray-600 hover:text-ocean-600 transition-colors">Ruins</a>
-        <a href="belize-snorkeling-and-beach-excursions.html" data-nav="snorkel" class="text-gray-600 hover:text-ocean-600 transition-colors">Snorkel</a>
-        <a href="belize-private-tours.html" data-nav="private" class="text-gray-600 hover:text-ocean-600 transition-colors">Private</a>
-        <a href="belize-cruise-port-guide.html" data-nav="port" class="text-gray-600 hover:text-ocean-600 transition-colors">Port Guide</a>
-      </div>
-      <a href="best-belize-shore-excursions.html" class="hidden md:inline-flex items-center gap-2 btn-ocean text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md">
-        Compare Tours
-      </a>
-      <button type="button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-sand-50" aria-label="Open menu">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
-    </div>
-  </div>
-</nav>
-"""
-
-
-def footer_html() -> str:
-    featured = [t for t in TOURS if t.get("featured")][:6]
-    tour_links = "".join(
-        f'<li><a href="{t["slug"]}.html" class="hover:text-white transition-colors">{t["title"]}</a></li>'
-        for t in featured
+    faq_schema = org_graph() + [
+        {"@type": "FAQPage", "mainEntity": faq_schema_entities()},
+    ]
+    html = page_shell(
+        title="Belize Shore Excursions FAQ | Tender Port & Cruise Day Answers",
+        description="FAQ for Belize cruise shore excursions — tender port logistics, timing, currency, ruins distances and reef days from Belize City.",
+        canonical="/belize-shore-excursions-faq.html",
+        og_image=FAQ_IMG,
+        nav_key="faq",
+        hero=hero_page(
+            title="Belize Shore Excursions FAQ",
+            lead="Straight answers for cruise passengers planning a Belize City tender day.",
+            image=FAQ_IMG,
+            alt=FAQ_ALT,
+            crumb="FAQ",
+            cta_href="/belize-cruise-port-guide.html",
+            cta_label="Explore the port guide",
+        ),
+        body=faq_body(),
+        schema=faq_schema,
     )
-    return f"""  <footer class="bg-gray-900 text-gray-400 py-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-        <div class="sm:col-span-2 lg:col-span-1">
-          <a href="index.html" class="font-display font-semibold text-white text-lg">{SITE}</a>
-          <p class="mt-3 text-sm leading-relaxed">Planning guide for cruise visitors to Belize City, Belize. Not affiliated with any cruise line.</p>
-        </div>
-        <div>
-          <h3 class="text-white text-sm font-semibold uppercase tracking-wider mb-4">Excursions</h3>
-          <ul class="space-y-2 text-sm">
-            {tour_links}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-white text-sm font-semibold uppercase tracking-wider mb-4">Guides</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="best-belize-shore-excursions.html" class="hover:text-white transition-colors">Belize Shore Excursions</a></li>
-            <li><a href="belize-cruise-port-guide.html" class="hover:text-white transition-colors">Cruise Port Guide</a></li>
-            <li><a href="one-day-in-belize-from-a-cruise-ship.html" class="hover:text-white transition-colors">One Day in Belize</a></li>
-            <li><a href="belize-snorkeling-and-beach-excursions.html" class="hover:text-white transition-colors">Snorkel &amp; Beach</a></li>
-            <li><a href="belize-mayan-ruins-excursions.html" class="hover:text-white transition-colors">Mayan Ruins</a></li>
-            <li><a href="belize-private-tours.html" class="hover:text-white transition-colors">Private Tours</a></li>
-            <li><a href="belize-shore-excursions-faq.html" class="hover:text-white transition-colors">FAQ</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 pt-8 text-xs text-center sm:text-left">
-        <p>&copy; 2026 {SITE}. Verify times and prices with operators before booking.</p>
-      </div>
-    </div>
-  </footer>
-"""
+    write(ROOT / "belize-shore-excursions-faq.html", html)
 
 
-def trust_strip_html() -> str:
-    return """<section class="trust-strip" aria-label="Belize shore excursion highlights">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <ul class="trust-strip__list">
-      <li class="trust-strip__item"><span class="trust-strip__check" aria-hidden="true">✔</span> Cave Tubing</li>
-      <li class="trust-strip__item"><span class="trust-strip__check" aria-hidden="true">✔</span> Mayan Ruins</li>
-      <li class="trust-strip__item"><span class="trust-strip__check" aria-hidden="true">✔</span> Barrier Reef Snorkel</li>
-      <li class="trust-strip__item"><span class="trust-strip__check" aria-hidden="true">✔</span> Return To Ship On Time</li>
-    </ul>
-  </div>
-</section>
-"""
+def tour_meta(tour: dict) -> tuple[str, str, str, str]:
+    img, alt = SLUG_IMAGES.get(
+        tour["slug"],
+        CATEGORY_IMAGES.get(tour["category"], (INTRO_IMG, INTRO_ALT)),
+    )
+    title = f"{tour['title']} | Belize Shore Excursion Guide"
+    desc = (
+        f"Editorial guide to {tour['title']} for Belize cruise passengers — "
+        f"{tour['seg_desc'].rstrip('.')}."
+    )
+    if len(desc) > 158:
+        desc = desc[:155].rstrip() + "…"
+    return title, desc, img, alt
 
 
-def tour_data_page(tour: dict) -> str:
-    cat = tour["category"]
-    if cat in ("snorkel", "beach"):
-        data_page = "snorkel"
-    elif cat in ("ruins", "lamanai"):
-        data_page = "ruins"
-    elif cat == "private":
-        data_page = "private"
-    elif cat in ("cave", "zip", "jeep", "combo"):
-        data_page = "adventure"
-    else:
-        data_page = "tours"
-    return data_page
+def build_products() -> None:
+    for tour in TOURS:
+        title, desc, img, alt = tour_meta(tour)
+        theme_href = {
+            "cave": "/best-belize-shore-excursions.html",
+            "zip": "/best-belize-shore-excursions.html",
+            "combo": "/best-belize-shore-excursions.html",
+            "snorkel": "/belize-snorkeling-and-beach-excursions.html",
+            "beach": "/belize-snorkeling-and-beach-excursions.html",
+            "ruins": "/belize-mayan-ruins-excursions.html",
+            "lamanai": "/belize-mayan-ruins-excursions.html",
+            "private": "/belize-private-tours.html",
+        }.get(tour["category"], "/best-belize-shore-excursions.html")
+        html = page_shell(
+            title=title,
+            description=desc,
+            canonical=f"/{tour['slug']}.html",
+            og_image=img,
+            nav_key="product",
+            hero=hero_page(
+                title=tour["title"],
+                lead=tour["seg_desc"],
+                image=img,
+                alt=alt,
+                crumb=f'<a href="{theme_href}">Guides</a> · {tour["title"]}',
+                cta_href=theme_href,
+                cta_label="Compare related guides",
+            ),
+            body=product_body(tour, PRIORITY_BY_SLUG.get(tour["slug"], "B")),
+            schema=org_graph(),
+        )
+        write(ROOT / f"{tour['slug']}.html", html)
 
 
-def build_page_meta() -> list[dict]:
+def build_trust() -> None:
     pages = [
-        dict(
-            file="index.html",
-            title=f"{SITE} | Cave Tubing, Ruins &amp; Reef Tours from Belize City",
-            description="Plan Belize shore excursions for cruise passengers — cave tubing, Altun Ha Mayan ruins, barrier reef snorkelling and beach breaks from Belize City tender port.",
-            keywords="Belize shore excursions, Belize City cruise excursions, cave tubing Belize, Altun Ha cruise tour, Belize snorkel excursion",
-            path="",
-            data_page="home",
-            hero="partials/hero-home.html",
-            content="home.html",
-            schema=home_schema(home_faq_data()),
+        (
+            "about",
+            "About Belize Shore Excursion",
+            "About Belize Shore Excursion — an independent cruise passenger planning guide for Belize City shore days.",
+            "About",
+            trust_about_body(),
         ),
-        dict(
-            file="best-belize-shore-excursions.html",
-            title="Belize Shore Excursions | Compare Belize City Cruise Tours",
-            description="Compare the best Belize shore excursions — cave tubing, Mayan ruins, reef snorkelling and beach breaks with cruise timing from Belize City tender port.",
-            keywords="Belize shore excursions, Belize City cruise port tours, compare Belize excursions, Belize cruise trips",
-            path="best-belize-shore-excursions.html",
-            data_page="excursions",
-            hero="partials/hero-excursions.html",
-            content="best-belize-shore-excursions.html",
-            preload=BEST_IMG,
-            schema={"@context": "https://schema.org", "@type": "WebPage", "name": "Belize Shore Excursions", "url": f"{DOMAIN}/best-belize-shore-excursions.html"},
+        (
+            "contact",
+            "Contact Belize Shore Excursion",
+            "Contact Belize Shore Excursion at hello@belizeshoreexcursion.com for editorial questions about this cruise planning guide.",
+            "Contact",
+            trust_contact_body(),
         ),
-        dict(
-            file="belize-cruise-port-guide.html",
-            title="Belize Cruise Port Guide | Belize City for Cruise Passengers",
-            description="Belize cruise port guide — tender port logistics, Fort Street Tourism Village, distances to ruins and reef, currency and shore excursion planning.",
-            keywords="Belize cruise port guide, Belize City port day, cruise passenger guide Belize, tender port Belize",
-            path="belize-cruise-port-guide.html",
-            data_page="port",
-            hero="partials/hero-port-guide.html",
-            content="belize-cruise-port-guide.html",
-            preload=PORT_IMG,
-            schema={"@context": "https://schema.org", "@type": "Article", "headline": "Belize Cruise Port Guide", "url": f"{DOMAIN}/belize-cruise-port-guide.html"},
+        (
+            "privacy",
+            "Privacy Policy | Belize Shore Excursion",
+            "Privacy policy for Belize Shore Excursion — how this independent cruise planning website handles information.",
+            "Privacy",
+            trust_privacy_body(),
         ),
-        dict(
-            file="one-day-in-belize-from-a-cruise-ship.html",
-            title="One Day in Belize from a Cruise Ship | Port Itinerary",
-            description="How to spend one day in Belize on a cruise stop — cave tubing, Mayan ruins or reef snorkel with return-to-ship buffer for Belize City tender port calls.",
-            keywords="one day in Belize cruise, Belize City port day itinerary, cruise stop Belize planning",
-            path="one-day-in-belize-from-a-cruise-ship.html",
-            data_page="port",
-            hero="partials/hero-one-day.html",
-            content="one-day-in-belize-from-a-cruise-ship.html",
-            preload=ONE_DAY_IMG,
-            schema={"@context": "https://schema.org", "@type": "Article", "headline": "One Day in Belize from a Cruise Ship", "url": f"{DOMAIN}/one-day-in-belize-from-a-cruise-ship.html"},
+        (
+            "terms",
+            "Terms of Use | Belize Shore Excursion",
+            "Terms of use for Belize Shore Excursion — editorial cruise planning information, not a booking marketplace.",
+            "Terms",
+            trust_terms_body(),
         ),
-        dict(
-            file="belize-private-tours.html",
-            title="Belize Private Tours | Private Shore Excursions for Cruise Passengers",
-            description="Private and small-group Belize shore excursions for cruise passengers — dedicated guides, custom pacing and return-to-ship timing from Belize City port.",
-            keywords="Belize private tours cruise, private shore excursions Belize, small group Belize tours",
-            path="belize-private-tours.html",
-            data_page="private",
-            hero="partials/hero-private.html",
-            content="belize-private-tours.html",
-            preload=PRIVATE_IMG,
-            schema={"@context": "https://schema.org", "@type": "Article", "headline": "Belize Private Tours", "url": f"{DOMAIN}/belize-private-tours.html"},
-        ),
-        dict(
-            file="belize-snorkeling-and-beach-excursions.html",
-            title="Belize Snorkeling &amp; Beach Excursions | Reef Tours for Cruise Passengers",
-            description="Belize snorkelling and beach excursions for cruise passengers — Caye Caulker, Shark Ray Alley, barrier reef and island beach breaks from Belize City.",
-            keywords="Belize snorkel excursion cruise, Caye Caulker shore excursion, Shark Ray Alley Belize, beach break cruise",
-            path="belize-snorkeling-and-beach-excursions.html",
-            data_page="snorkel",
-            hero="partials/hero-snorkel.html",
-            content="belize-snorkeling-and-beach-excursions.html",
-            preload=SNORKEL_IMG,
-            schema={"@context": "https://schema.org", "@type": "Article", "headline": "Belize Snorkeling and Beach Excursions", "url": f"{DOMAIN}/belize-snorkeling-and-beach-excursions.html"},
-        ),
-        dict(
-            file="belize-mayan-ruins-excursions.html",
-            title="Belize Mayan Ruins Excursions | Altun Ha &amp; Lamanai for Cruise Passengers",
-            description="Belize Mayan ruins excursions for cruise passengers — Altun Ha, Lamanai, Cahal Pech and cultural tours from Belize City tender port.",
-            keywords="Belize Mayan ruins cruise, Altun Ha shore excursion, Lamanai Belize tour, Mayan ruins Belize City",
-            path="belize-mayan-ruins-excursions.html",
-            data_page="ruins",
-            hero="partials/hero-ruins.html",
-            content="belize-mayan-ruins-excursions.html",
-            preload=RUINS_IMG,
-            schema={"@context": "https://schema.org", "@type": "Article", "headline": "Belize Mayan Ruins Excursions", "url": f"{DOMAIN}/belize-mayan-ruins-excursions.html"},
-        ),
-        dict(
-            file="belize-shore-excursions-faq.html",
-            title="Belize Shore Excursions FAQ | Cruise Passenger Questions",
-            description="Frequently asked questions about Belize shore excursions — tender port logistics, safety, currency, best tours and what to bring on a Belize cruise port day.",
-            keywords="Belize shore excursions FAQ, Belize cruise port questions, is Belize safe cruise, Belize tender port",
-            path="belize-shore-excursions-faq.html",
-            data_page="port",
-            hero="partials/hero-faq.html",
-            content="belize-shore-excursions-faq.html",
-            preload=FAQ_IMG,
-            schema={"@context": "https://schema.org", "@type": "FAQPage", "name": "Belize Shore Excursions FAQ", "url": f"{DOMAIN}/belize-shore-excursions-faq.html"},
+        (
+            "methodology",
+            "Methodology | Belize Shore Excursion",
+            "How Belize Shore Excursion researches and organises cruise shore excursion guides for Belize City.",
+            "Methodology",
+            trust_methodology_body(),
         ),
     ]
-    for tour in TOURS:
-        img, _ = CATEGORY_IMAGES.get(tour["category"], (INTRO_IMG, INTRO_ALT))
-        pages.append(dict(
-            file=f"{tour['slug']}.html",
-            title=f"{tour['title']} | Belize Cruise Shore Excursion",
-            description=f"{tour['title']} shore excursion for Belize cruise passengers — {tour['seg_desc']} {tour['duration']} from Belize City tender port with return-to-ship timing.",
-            keywords=f"{tour['title']} Belize, Belize shore excursion cruise, {tour['category']} Belize City tour",
-            path=f"{tour['slug']}.html",
-            data_page=tour_data_page(tour),
-            hero=f"partials/hero-{tour['slug']}.html",
-            content=f"{tour['slug']}.html",
-            preload=img,
-            schema=tourist_trip_schema(tour["title"], f"{tour['seg_desc']} Shore excursion from Belize City cruise port for cruise passengers."),
-        ))
-    return pages
+    for slug, title, description, crumb, body in pages:
+        html = page_shell(
+            title=title,
+            description=description,
+            canonical=f"/{slug}/",
+            og_image=HOME_HERO,
+            nav_key=slug,
+            hero=hero_page(
+                title=crumb,
+                lead=description,
+                image=HOME_HERO,
+                alt=HOME_HERO_ALT,
+                crumb=crumb,
+            ),
+            body=body,
+            schema=org_graph(),
+        )
+        # compact hero for trust
+        html = html.replace('class="hero hero--page"', 'class="hero hero--page hero--compact"', 1)
+        write(ROOT / slug / "index.html", html)
 
 
-def build_hero_defs() -> dict[str, str]:
-    heroes = {
-        "hero-home.html": hero_home(),
-        "hero-excursions.html": hero_inner(
-            "Belize City · Tender Port",
-            f"Belize<br/><span class=\"{ACCENT}\">Shore Excursions</span>",
-            "Compare cave tubing, Mayan ruins, reef snorkelling and beach breaks for your Belize cruise ship schedule.",
-            BEST_IMG, BEST_ALT, breadcrumb="Shore Excursions",
-        ),
-        "hero-port-guide.html": hero_inner(
-            "Cruise Passenger Guide",
-            f"Belize<br/><span class=\"{ACCENT}\">Cruise Port Guide</span>",
-            "Tender port logistics, Fort Street Tourism Village, distances to ruins and reef, currency and return-to-ship timing.",
-            PORT_IMG, PORT_ALT, breadcrumb="Port Guide",
-            cta=("best-belize-shore-excursions.html", "View Shore Excursions →"),
-            tags=["🚢 Tender Port", "🏛️ Mayan Ruins", "🐠 Barrier Reef", "💵 BZD & USD"],
-        ),
-        "hero-one-day.html": hero_inner(
-            "Port Day Timeline",
-            f"One Day in<br/><span class=\"{ACCENT}\">Belize</span>",
-            "Hour-by-hour plan from tender to departure — ruins, cave tubing or reef snorkel with return-to-ship buffer.",
-            ONE_DAY_IMG, ONE_DAY_ALT, breadcrumb="One Day in Belize",
-        ),
-        "hero-private.html": hero_inner(
-            "Private &amp; Small Group",
-            f"Belize<br/><span class=\"{ACCENT}\">Private Tours</span>",
-            "Dedicated guides, custom pacing and private cave tubing for cruise passenger groups at Belize City port.",
-            PRIVATE_IMG, PRIVATE_ALT, breadcrumb="Private Tours",
-        ),
-        "hero-snorkel.html": hero_inner(
-            "Barrier Reef",
-            f"Snorkeling &amp;<br/><span class=\"{ACCENT}\">Beach Excursions</span>",
-            "Caye Caulker, Shark Ray Alley and Belize Barrier Reef snorkelling timed for cruise port schedules.",
-            SNORKEL_IMG, SNORKEL_ALT, breadcrumb="Snorkel &amp; Beach",
-        ),
-        "hero-ruins.html": hero_inner(
-            "Mayan Heritage",
-            f"Mayan Ruins<br/><span class=\"{ACCENT}\">Excursions</span>",
-            "Altun Ha, Lamanai and Cahal Pech — ancient temples and cultural tours from Belize City cruise port.",
-            RUINS_IMG, RUINS_ALT, breadcrumb="Mayan Ruins",
-        ),
-        "hero-faq.html": hero_inner(
-            "Cruise Passenger FAQ",
-            f"Belize Shore<br/><span class=\"{ACCENT}\">Excursions FAQ</span>",
-            "Tender port logistics, safety, currency, best tours and packing tips for your Belize cruise port day.",
-            FAQ_IMG, FAQ_ALT, breadcrumb="FAQ",
-        ),
-    }
-    for tour in TOURS:
-        heroes[f"hero-{tour['slug']}.html"] = tour_hero(tour)
-    return heroes
+def build_404() -> None:
+    html = page_shell(
+        title="Page not found | Belize Shore Excursion",
+        description="The page you requested was not found on Belize Shore Excursion.",
+        canonical="/404.html",
+        og_image=HOME_HERO,
+        nav_key="404",
+        hero="",
+        body=not_found_body(),
+        schema=org_graph(),
+        robots="noindex, follow",
+    )
+    # 404 should not claim homepage canonical
+    html = html.replace(
+        f'<link rel="canonical" href="{DOMAIN}/404.html" />',
+        f'<link rel="canonical" href="{DOMAIN}/404.html" />\n  <meta name="robots" content="noindex, follow" />',
+    )
+    write(ROOT / "404.html", html)
+
+
+def build_sitemap_robots() -> None:
+    urls: list[tuple[str, str, str]] = []
+    for route in MANIFEST["routes"]:
+        if not route.get("sitemap", True):
+            continue
+        path = route["path"]
+        loc = f"{DOMAIN}/" if path == "/" else f"{DOMAIN}{path}"
+        priority = "1.0" if path == "/" else ("0.9" if route["kind"] in {"hub", "product"} else "0.8")
+        urls.append((loc, priority, "monthly" if path != "/" else "weekly"))
+    for route in MANIFEST["trust_routes"]:
+        urls.append((f"{DOMAIN}{route['path']}", "0.5", "yearly"))
+
+    body = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc, pri, freq in urls:
+        body.append("  <url>")
+        body.append(f"    <loc>{loc}</loc>")
+        body.append(f"    <changefreq>{freq}</changefreq>")
+        body.append(f"    <priority>{pri}</priority>")
+        body.append("  </url>")
+    body.append("</urlset>")
+    body.append("")
+    write(ROOT / "sitemap.xml", "\n".join(body))
+    write(
+        ROOT / "robots.txt",
+        f"""User-agent: *
+Allow: /
+
+Sitemap: {DOMAIN}/sitemap.xml
+""",
+    )
+
+
+def verify_protected_count() -> None:
+    expected = {r["file"] for r in MANIFEST["routes"]}
+    missing = [f for f in expected if not (ROOT / f).exists()]
+    if missing:
+        raise SystemExit(f"Missing protected files: {missing}")
+    if len(expected) != 42:
+        raise SystemExit(f"Manifest expected 42, got {len(expected)}")
+    print(f"  verified {len(expected)}/42 protected files present")
 
 
 def main() -> None:
-    print("Building Belize Shore Excursion site…")
-
-    write("partials/nav.html", nav_html())
-    write("partials/footer.html", footer_html())
-    write("partials/trust-strip.html", trust_strip_html())
-
-    for name, html in build_hero_defs().items():
-        write(f"partials/{name}", html)
-
-    for name, html in all_guide_content().items():
-        write(f"content/{name}", html)
-
-    for name, html in all_tour_content().items():
-        write(f"content/{name}", html)
-
-    for p in build_page_meta():
-        write(
-            p["file"],
-            page_shell(
-                title=p["title"],
-                description=p["description"],
-                keywords=p["keywords"],
-                canonical_path=p["path"],
-                data_page=p["data_page"],
-                hero=p["hero"],
-                content=p["content"],
-                preload=p.get("preload", HOME_HERO),
-                schema=p.get("schema"),
-            ),
-        )
-
-    write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n")
-
-    lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for loc, priority, freq in SITEMAP_PAGES:
-        url = f"{DOMAIN}/{loc}" if loc else f"{DOMAIN}/"
-        lines += [
-            "  <url>",
-            f"    <loc>{url}</loc>",
-            f"    <lastmod>{DATE}</lastmod>",
-            f"    <changefreq>{freq}</changefreq>",
-            f"    <priority>{priority}</priority>",
-            "  </url>",
-        ]
-    lines.append("</urlset>")
-    write("sitemap.xml", "\n".join(lines) + "\n")
-
-    write("package.json", """{
-  "name": "belize-shore-excursion",
-  "private": true,
-  "scripts": {
-    "build": "python3 scripts/build-belize-site.py",
-    "images": "python3 scripts/fetch-belize-images.py",
-    "check": "python3 scripts/check-belize-site.py",
-    "deploy": "wrangler deploy",
-    "preview": "python3 -m http.server 8908"
-  },
-  "devDependencies": {
-    "wrangler": "^4.94.0"
-  }
-}
-""")
-
-    write("wrangler.jsonc", """{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "belize-shore-excursion",
-  "compatibility_date": "2026-06-06",
-  "observability": { "enabled": true },
-  "assets": { "directory": "." },
-  "routes": [
-    {
-      "pattern": "belizeshoreexcursion.com",
-      "custom_domain": true
-    }
-  ]
-}
-""")
-
-    write("deploy.sh", f"""#!/bin/bash
-set -euo pipefail
-cd "$(dirname "$0")"
-
-if [[ ! -f node_modules/.bin/wrangler ]]; then
-  npm install
-fi
-
-echo "Deploying {SITE} to Cloudflare..."
-npx wrangler deploy
-
-echo "Done. Check {DOMAIN}/ shortly."
-""")
-
-    (ROOT / "deploy.sh").chmod(0o755)
-
-    images_dir = ROOT / "images"
-    images_dir.mkdir(exist_ok=True)
-    for img in ALL_IMAGES:
-        p = ROOT / img
-        if p.exists() and p.stat().st_size > 5000:
-            continue
-        p.write_bytes(PLACEHOLDER_PNG)
-
-    write("images/ATTRIBUTION.md", """# Image attribution
-
-Hero and content images are sourced from [Wikimedia Commons](https://commons.wikimedia.org) under Creative Commons licences where applicable.
-
-Run `npm run images` to download location-accurate photos. Replace any image with your own assets — keep filenames consistent with `scripts/belize_config.py`.
-""")
-
-    write("README.md", """# Belize Shore Excursion
-
-Cruise-passenger planning guide for Belize City, Belize shore excursions.
-
-## Development
-
-```bash
-npm install
-npm run build
-npm run images
-npm run check
-npm run preview
-```
-
-Open http://localhost:8908 (requires local server for partial loading).
-
-## Deploy to Cloudflare
-
-```bash
-npm run build && npm run images && npm run check && ./deploy.sh
-```
-
-Domain: https://belizeshoreexcursion.com
-""")
-
-    print("Done.")
+    print("Building Belize Shore Excursion World 2.0…")
+    build_home()
+    build_planning_pages()
+    build_products()
+    build_trust()
+    build_404()
+    build_sitemap_robots()
+    verify_protected_count()
+    print("Build complete.")
 
 
 if __name__ == "__main__":

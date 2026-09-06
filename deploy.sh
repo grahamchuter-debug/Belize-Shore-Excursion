@@ -1,12 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
-
-if [[ ! -f node_modules/.bin/wrangler ]]; then
-  npm install
-fi
-
-echo "Deploying Belize Shore Excursion to Cloudflare..."
+npm run build
+npm run qa
 npx wrangler deploy
-
-echo "Done. Check https://belizeshoreexcursion.com/ shortly."
+echo "Deployed https://belizeshoreexcursion.com"

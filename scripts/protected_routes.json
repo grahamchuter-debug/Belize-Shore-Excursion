@@ -6,54 +6,335 @@
   "phase": "13B",
   "expected_count": 42,
   "routes": [
-    {"path": "/", "file": "index.html", "kind": "home", "sitemap": true},
-    {"path": "/best-belize-shore-excursions.html", "file": "best-belize-shore-excursions.html", "kind": "hub", "sitemap": true},
-    {"path": "/belize-cruise-port-guide.html", "file": "belize-cruise-port-guide.html", "kind": "planning", "sitemap": true},
-    {"path": "/one-day-in-belize-from-a-cruise-ship.html", "file": "one-day-in-belize-from-a-cruise-ship.html", "kind": "planning", "sitemap": true},
-    {"path": "/belize-private-tours.html", "file": "belize-private-tours.html", "kind": "hub", "sitemap": true},
-    {"path": "/belize-snorkeling-and-beach-excursions.html", "file": "belize-snorkeling-and-beach-excursions.html", "kind": "hub", "sitemap": true},
-    {"path": "/belize-mayan-ruins-excursions.html", "file": "belize-mayan-ruins-excursions.html", "kind": "hub", "sitemap": true},
-    {"path": "/belize-shore-excursions-faq.html", "file": "belize-shore-excursions-faq.html", "kind": "planning", "sitemap": true},
-    {"path": "/cave-tubing-and-zip-line-combo.html", "file": "cave-tubing-and-zip-line-combo.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/belize-cave-tubing.html", "file": "belize-cave-tubing.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/turtle-snorkel-and-island-time.html", "file": "turtle-snorkel-and-island-time.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/altun-ha-and-belize-city-overview.html", "file": "altun-ha-and-belize-city-overview.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/shark-ray-alley-and-caye-caulker-beach-break.html", "file": "shark-ray-alley-and-caye-caulker-beach-break.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/lamanai-eco-adventure.html", "file": "lamanai-eco-adventure.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/kukumba-beach-and-city.html", "file": "kukumba-beach-and-city.html", "kind": "product", "priority": "A", "sitemap": true},
-    {"path": "/barrier-reef-snorkel.html", "file": "barrier-reef-snorkel.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/xunantunich-and-cave-tubing.html", "file": "xunantunich-and-cave-tubing.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/private-tubing-expedition.html", "file": "private-tubing-expedition.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/cave-tubing-and-jungle-trek-with-lunch.html", "file": "cave-tubing-and-jungle-trek-with-lunch.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/jungle-zip-line.html", "file": "jungle-zip-line.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/belize-city-and-zoo-combo.html", "file": "belize-city-and-zoo-combo.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/belize-zoo-and-jeep-adventure.html", "file": "belize-zoo-and-jeep-adventure.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/zip-line-and-belize-zoo-with-lunch.html", "file": "zip-line-and-belize-zoo-with-lunch.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/howler-monkey-sanctuary.html", "file": "howler-monkey-sanctuary.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/baboon-sanctuary-and-jeep-adventure.html", "file": "baboon-sanctuary-and-jeep-adventure.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/expedition-to-crooked-tree-wildlife-sanctuary.html", "file": "expedition-to-crooked-tree-wildlife-sanctuary.html", "kind": "product", "priority": "B", "sitemap": true},
-    {"path": "/jungle-jeep-adventure.html", "file": "jungle-jeep-adventure.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/jungle-jeep-adventure-and-beach-break.html", "file": "jungle-jeep-adventure-and-beach-break.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/jungle-jeep-adventure-and-sibun-wildlife-river-cruise.html", "file": "jungle-jeep-adventure-and-sibun-wildlife-river-cruise.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/belize-jungle-jeep-rum-factory-and-museum-tour.html", "file": "belize-jungle-jeep-rum-factory-and-museum-tour.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/belize-city-and-rum-factory-tour.html", "file": "belize-city-and-rum-factory-tour.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/city-sightseeing-and-highlights.html", "file": "city-sightseeing-and-highlights.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/river-wallace-and-burrell-boom.html", "file": "river-wallace-and-burrell-boom.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/beach-and-city.html", "file": "beach-and-city.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/journey-to-cahal-pech.html", "file": "journey-to-cahal-pech.html", "kind": "product", "priority": "C", "sitemap": true},
-    {"path": "/altun-ha-and-jeep-adventure.html", "file": "altun-ha-and-jeep-adventure.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/altun-ha-and-river-wallace.html", "file": "altun-ha-and-river-wallace.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/altun-ha-mayan-ruins-and-tropical-jungle-monkey-reserve.html", "file": "altun-ha-mayan-ruins-and-tropical-jungle-monkey-reserve.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/altun-ha-mayan-ruins-and-wildlife-of-the-belize-zoo.html", "file": "altun-ha-mayan-ruins-and-wildlife-of-the-belize-zoo.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/adventure-to-altun-ha.html", "file": "adventure-to-altun-ha.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/adventure-to-altun-ha-and-belize-zoo.html", "file": "adventure-to-altun-ha-and-belize-zoo.html", "kind": "product", "priority": "D", "cluster": "altun-ha", "sitemap": true},
-    {"path": "/belize-party-bus.html", "file": "belize-party-bus.html", "kind": "product", "priority": "D", "cluster": "party-bus", "sitemap": true}
+    {
+      "path": "/",
+      "file": "index.html",
+      "kind": "home",
+      "sitemap": true
+    },
+    {
+      "path": "/best-belize-shore-excursions.html",
+      "file": "best-belize-shore-excursions.html",
+      "kind": "hub",
+      "sitemap": true
+    },
+    {
+      "path": "/belize-cruise-port-guide.html",
+      "file": "belize-cruise-port-guide.html",
+      "kind": "planning",
+      "sitemap": true
+    },
+    {
+      "path": "/one-day-in-belize-from-a-cruise-ship.html",
+      "file": "one-day-in-belize-from-a-cruise-ship.html",
+      "kind": "planning",
+      "sitemap": true
+    },
+    {
+      "path": "/belize-private-tours.html",
+      "file": "belize-private-tours.html",
+      "kind": "hub",
+      "sitemap": true
+    },
+    {
+      "path": "/belize-snorkeling-and-beach-excursions.html",
+      "file": "belize-snorkeling-and-beach-excursions.html",
+      "kind": "hub",
+      "sitemap": true
+    },
+    {
+      "path": "/belize-mayan-ruins-excursions.html",
+      "file": "belize-mayan-ruins-excursions.html",
+      "kind": "hub",
+      "sitemap": true
+    },
+    {
+      "path": "/belize-shore-excursions-faq.html",
+      "file": "belize-shore-excursions-faq.html",
+      "kind": "planning",
+      "sitemap": true
+    },
+    {
+      "path": "/cave-tubing-and-zip-line-combo.html",
+      "file": "cave-tubing-and-zip-line-combo.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/belize-cave-tubing.html",
+      "file": "belize-cave-tubing.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/turtle-snorkel-and-island-time.html",
+      "file": "turtle-snorkel-and-island-time.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/altun-ha-and-belize-city-overview.html",
+      "file": "altun-ha-and-belize-city-overview.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/belize-city-and-zoo-combo.html",
+      "file": "belize-city-and-zoo-combo.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/altun-ha-and-jeep-adventure.html",
+      "file": "altun-ha-and-jeep-adventure.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/shark-ray-alley-and-caye-caulker-beach-break.html",
+      "file": "shark-ray-alley-and-caye-caulker-beach-break.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/altun-ha-and-river-wallace.html",
+      "file": "altun-ha-and-river-wallace.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/jungle-jeep-adventure-and-beach-break.html",
+      "file": "jungle-jeep-adventure-and-beach-break.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/altun-ha-mayan-ruins-and-tropical-jungle-monkey-reserve.html",
+      "file": "altun-ha-mayan-ruins-and-tropical-jungle-monkey-reserve.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/river-wallace-and-burrell-boom.html",
+      "file": "river-wallace-and-burrell-boom.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/jungle-jeep-adventure-and-sibun-wildlife-river-cruise.html",
+      "file": "jungle-jeep-adventure-and-sibun-wildlife-river-cruise.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/jungle-zip-line.html",
+      "file": "jungle-zip-line.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/jungle-jeep-adventure.html",
+      "file": "jungle-jeep-adventure.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/belize-jungle-jeep-rum-factory-and-museum-tour.html",
+      "file": "belize-jungle-jeep-rum-factory-and-museum-tour.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/baboon-sanctuary-and-jeep-adventure.html",
+      "file": "baboon-sanctuary-and-jeep-adventure.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/zip-line-and-belize-zoo-with-lunch.html",
+      "file": "zip-line-and-belize-zoo-with-lunch.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/belize-zoo-and-jeep-adventure.html",
+      "file": "belize-zoo-and-jeep-adventure.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/journey-to-cahal-pech.html",
+      "file": "journey-to-cahal-pech.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/adventure-to-altun-ha-and-belize-zoo.html",
+      "file": "adventure-to-altun-ha-and-belize-zoo.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/howler-monkey-sanctuary.html",
+      "file": "howler-monkey-sanctuary.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/lamanai-eco-adventure.html",
+      "file": "lamanai-eco-adventure.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/belize-city-and-rum-factory-tour.html",
+      "file": "belize-city-and-rum-factory-tour.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/city-sightseeing-and-highlights.html",
+      "file": "city-sightseeing-and-highlights.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/cave-tubing-and-jungle-trek-with-lunch.html",
+      "file": "cave-tubing-and-jungle-trek-with-lunch.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/beach-and-city.html",
+      "file": "beach-and-city.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "C"
+    },
+    {
+      "path": "/barrier-reef-snorkel.html",
+      "file": "barrier-reef-snorkel.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/kukumba-beach-and-city.html",
+      "file": "kukumba-beach-and-city.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "A"
+    },
+    {
+      "path": "/xunantunich-and-cave-tubing.html",
+      "file": "xunantunich-and-cave-tubing.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/belize-party-bus.html",
+      "file": "belize-party-bus.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "party-bus"
+    },
+    {
+      "path": "/adventure-to-altun-ha.html",
+      "file": "adventure-to-altun-ha.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/altun-ha-mayan-ruins-and-wildlife-of-the-belize-zoo.html",
+      "file": "altun-ha-mayan-ruins-and-wildlife-of-the-belize-zoo.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "D",
+      "cluster": "altun-ha"
+    },
+    {
+      "path": "/expedition-to-crooked-tree-wildlife-sanctuary.html",
+      "file": "expedition-to-crooked-tree-wildlife-sanctuary.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    },
+    {
+      "path": "/private-tubing-expedition.html",
+      "file": "private-tubing-expedition.html",
+      "kind": "product",
+      "sitemap": true,
+      "priority": "B"
+    }
   ],
   "trust_routes": [
-    {"path": "/about/", "file": "about/index.html", "sitemap": true},
-    {"path": "/contact/", "file": "contact/index.html", "sitemap": true},
-    {"path": "/privacy/", "file": "privacy/index.html", "sitemap": true},
-    {"path": "/terms/", "file": "terms/index.html", "sitemap": true},
-    {"path": "/methodology/", "file": "methodology/index.html", "sitemap": true}
-  ]
+    {
+      "path": "/about/",
+      "file": "about/index.html",
+      "sitemap": true
+    },
+    {
+      "path": "/contact/",
+      "file": "contact/index.html",
+      "sitemap": true
+    },
+    {
+      "path": "/privacy/",
+      "file": "privacy/index.html",
+      "sitemap": true
+    },
+    {
+      "path": "/terms/",
+      "file": "terms/index.html",
+      "sitemap": true
+    },
+    {
+      "path": "/methodology/",
+      "file": "methodology/index.html",
+      "sitemap": true
+    }
+  ],
+  "featured": [
+    "cave-tubing-and-zip-line-combo",
+    "belize-cave-tubing",
+    "turtle-snorkel-and-island-time",
+    "altun-ha-and-belize-city-overview",
+    "shark-ray-alley-and-caye-caulker-beach-break",
+    "lamanai-eco-adventure",
+    "private-tubing-expedition"
+  ],
+  "faq_count": 12
 }

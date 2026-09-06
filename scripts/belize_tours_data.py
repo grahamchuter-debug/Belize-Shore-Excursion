@@ -1,4 +1,4 @@
-"""Tour inventory for Belize Shore Excursion — sourced from Shore Excursions Group Belize port."""
+"""Tour inventory for Belize Shore Excursion (editorial route catalogue for Phase 13B)."""
 
 TOURS: list[dict] = [
     {

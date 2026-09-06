@@ -1,11 +1,12 @@
 {
   "name": "belize-shore-excursion",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "python3 scripts/build-belize-site.py",
-    "check": "python3 scripts/qa-regression.py",
-    "qa": "python3 scripts/qa-regression.py",
-    "deploy": "wrangler deploy",
+    "build": "python3 scripts/build-site.py",
+    "qa": "node scripts/qa-site.mjs",
+    "check": "npm run qa",
+    "deploy": "npm run build && npm run qa && wrangler deploy",
     "preview": "python3 -m http.server 8908"
   },
   "devDependencies": {

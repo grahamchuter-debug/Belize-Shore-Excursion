@@ -1,31 +1,33 @@
 # Image attribution — Belize Shore Excursion
 
-Hero and content images used on the live site are Belize-relevant assets under `images/`, sourced for this destination guide (including Wikimedia Commons Creative Commons material where applicable).
+Belize photography used on this site is sourced from [Wikimedia Commons](https://commons.wikimedia.org) under applicable Creative Commons or public-domain terms. Filenames are mapped in `scripts/belize_config.py`.
 
-## Live Belize image set
+## Active Belize assets (`images/`)
 
-| File | Typical use |
-|------|-------------|
+| File | Role |
+|------|------|
 | `hero-belize.png` | Homepage hero |
-| `belize-cruise-port.png` / `belize-port-arrival.png` | Port / city |
-| `best-belize-excursions.png` | Best excursions hub |
+| `belize-cruise-port.png` | Port / city context |
+| `belize-port-arrival.png` | Tender / arrival context |
+| `best-belize-excursions.png` | Excursion hub |
 | `one-day-belize.png` | One-day planning |
-| `belize-intro.png` | General Belize atmosphere |
+| `belize-intro.png` | General Belize scenery |
 | `belize-cave-tubing.png` | Cave tubing |
-| `belize-zip-line.png` | Zip line |
+| `belize-zip-line.png` | Zip line / canopy |
 | `belize-snorkel.png` | Reef snorkel |
 | `belize-beach.png` | Beach / island |
-| `altun-ha.png` / `belize-ruins.png` | Mayan ruins |
+| `altun-ha.png` | Altun Ha ruins |
 | `lamanai.png` | Lamanai |
 | `belize-zoo.png` | Wildlife / zoo |
-| `belize-jeep.png` | Jeep adventures |
+| `belize-jeep.png` | Jeep adventure |
 | `belize-private.png` | Private touring |
 | `belize-faq.png` | FAQ / trust |
+| `belize-ruins.png` | Mayan ruins hub |
 
-No Shore Excursions Group / supplier marketing images are used without rights clearance.
+No Shore Excursions Group (SEG) supplier marketing images are used.
 
-## Quarantined (not deployed)
+## Quarantined Antigua leftovers
 
-Antigua-era contamination lives under `quarantine/antigua/` and is excluded from Worker asset uploads via `.assetsignore`. Do not reintroduce these filenames into `images/` or HTML.
+Antigua-era clone assets are stored under `quarantine/antigua/` and excluded from deploy via `.assetsignore`. They must not appear under `images/` or in public HTML.
 
-Examples: `hero-antigua.png`, `nelsons-dockyard.png`, `cades-reef.png`, `shirley-heights.png`, and other Antigua-named assets.
+Refresh Wikimedia downloads with `python3 scripts/fetch-belize-images.py` only when intentionally replacing Belize assets — keep filenames stable.

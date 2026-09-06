@@ -14,12 +14,12 @@
   },
   "routes": [
     {
-      "pattern": "belizeshoreexcursion.com",
-      "custom_domain": true
+      "pattern": "belizeshoreexcursion.com/*",
+      "zone_name": "belizeshoreexcursion.com"
     },
     {
-      "pattern": "www.belizeshoreexcursion.com",
-      "custom_domain": true
+      "pattern": "www.belizeshoreexcursion.com/*",
+      "zone_name": "belizeshoreexcursion.com"
     }
   ]
 }

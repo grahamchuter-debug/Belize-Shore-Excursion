@@ -1,0 +1,36 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "belize-bookings-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "dev": {
+    "ip": "localhost",
+    "port": 8794,
+    "local_protocol": "http"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "belize-bookings-test",
+      "database_id": "c2473383-c8a2-4ea0-b679-9873716f07f7",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "PAYMENTS_MODE": "test",
+    "BOOKINGS_ENABLED": "true",
+    "EMAIL_SENDING_ENABLED": "false",
+    "EMAIL_FROM": "bookings@notifications.wowatour.com",
+    "EMAIL_FROM_NAME": "Belize Shore Excursions",
+    "EMAIL_REPLY_TO": "hello@belizeshoreexcursion.com",
+    "CORS_ALLOWED_ORIGINS": "http://localhost:8908,http://127.0.0.1:8908,https://belizeshoreexcursion.com,https://www.belizeshoreexcursion.com",
+    "SITE_BASE_URL": "https://belizeshoreexcursion.com",
+    "ORIGINATING_SITE": "belizeshoreexcursion.com",
+    "ORIGINATING_PORT": "Belize City, Belize",
+    "OPERATOR_PORTAL_BASE_URL": "https://belize-bookings-test.dark-violet-8d91.workers.dev"
+  }
+}

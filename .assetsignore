@@ -7,8 +7,11 @@ scripts/
 content/
 partials/
 docs/
+shared/
+workers/
 package-lock.json
 package.json
+tsconfig.json
 *.md
 !images/ATTRIBUTION.md
 .dev.vars

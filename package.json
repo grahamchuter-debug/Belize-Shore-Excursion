@@ -1,15 +1,30 @@
 {
   "name": "belize-shore-excursion",
   "private": true,
+  "version": "2.0.0",
+  "description": "Belize Shore Excursion — Caribbean World 2.0 static site + request-to-book Worker",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "build": "python3 scripts/build-site.py",
+    "build": "python3 scripts/build-site.py && python3 scripts/generate-book-pages.py",
     "qa": "node scripts/qa-site.mjs",
     "check": "npm run qa",
     "deploy": "npm run build && npm run qa && wrangler deploy",
-    "preview": "python3 -m http.server 8908"
+    "preview": "python3 -m http.server 8908",
+    "test:booking": "npx --yes tsx --test shared/world-booking/booking.test.ts shared/world-booking/date-picker.test.ts workers/bookings/src/belize-security.test.ts workers/bookings/src/operator-refund.test.ts",
+    "bookings:dev": "wrangler dev --config workers/bookings/wrangler.jsonc --port 8794",
+    "bookings:migrate:test": "wrangler d1 migrations apply belize-bookings-test --remote --config workers/bookings/wrangler.jsonc",
+    "bookings:migrate:prod": "wrangler d1 migrations apply belize-bookings-prod --remote --config workers/bookings/wrangler.prod.jsonc",
+    "bookings:deploy:test": "wrangler deploy --config workers/bookings/wrangler.jsonc",
+    "bookings:deploy:prod": "wrangler deploy --config workers/bookings/wrangler.prod.jsonc"
+  },
+  "dependencies": {
+    "stripe": "^22.6.1"
   },
   "devDependencies": {
+    "typescript": "^5.9.3",
     "wrangler": "^4.94.0"
   }
 }

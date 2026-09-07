@@ -501,7 +501,197 @@ def _cluster_note(tour: dict, priority: str) -> str:
     return ""
 
 
+def commercial_tour_body(tour: dict) -> str | None:
+    """Request-to-book commercial pages for the three approved Belize products."""
+    slug = tour["slug"]
+    book = f"/book/{slug}/"
+    cancel = (
+        "Free cancellation up to 14 days before your excursion. Cancellations made within "
+        "14 days of departure are non-refundable. If we are unable to confirm your excursion "
+        "after payment, you will receive a full refund to your original payment method."
+    )
+    steps = """
+    <ol class="rtb-steps">
+      <li>Choose your cruise date and guests</li>
+      <li>Pay securely online to submit your request</li>
+      <li>We check the excursion and email confirmation separately</li>
+      <li>If we cannot confirm, you receive a full refund</li>
+    </ol>"""
+    secondary = (
+        "Pay securely online to request your excursion. Your booking is confirmed separately "
+        "after availability is checked."
+    )
+
+    if slug == "belize-cave-tubing":
+        image, alt = SLUG_IMAGES.get(slug, (CAVE_IMG, CAVE_ALT))
+        return f"""
+<section class="section"><div class="wrap grid-2">
+  <div class="prose">
+    <p class="eyebrow">Shared excursion · Request to book</p>
+    <h2>Belize Cave Tubing</h2>
+    <p class="lead">Tubing through Belize's underground cave system on a focused shared excursion from the cruise tender pier.</p>
+    <p>{secondary}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{book}">Book now</a>
+      <a class="btn btn--outline" href="/best-belize-shore-excursions.html">Compare excursions</a>
+    </div>
+  </div>{_img(image, alt)}
+</div></section>
+<section class="section section--alt"><div class="wrap">
+  {snapshot([("Duration", "About 5 hours"), ("Price", "$86 per eligible guest"), ("Group", "Shared excursion"), ("Min age / height", "8 years · 48 inches"), ("Arrival", "Cruise Ship Tender Pier"), ("Booking", "Request to book")])}
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>Pricing and guests</h2>
+  <ul>
+    <li><strong>Eligible guests</strong> — USD $86 each</li>
+    <li><strong>Infants</strong> — not permitted</li>
+    <li>All participants must be at least 8 years old and at least 48 inches tall</li>
+    <li>Online requests accept up to 10 guests. For larger groups email <a href="mailto:{EMAIL}">{EMAIL}</a></li>
+  </ul>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+</div></section>
+<section class="section section--alt"><div class="wrap prose">
+  <h2>What is included</h2>
+  <ul>
+    <li>Guide and air-conditioned transport</li>
+    <li>Tube and miner's lamp</li>
+    <li>About two hours of cave float time</li>
+  </ul>
+  <p><strong>Not included:</strong> food and drinks.</p>
+  <h3>Physical requirements</h3>
+  <ul>
+    <li>About a 30-minute walk on loose gravel</li>
+    <li>River wading on a rocky bottom; fitness required</li>
+    <li>Guests with neck, back or hip ailments, and anyone who is pregnant, should not participate</li>
+  </ul>
+  <p class="note">Meeting point: Cruise Ship Tender Pier. Exact instructions are provided after confirmation.</p>
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>How booking works</h2>
+  {steps}
+  <p>{secondary}</p>
+  <h2>Cancellation</h2>
+  <p>{cancel}</p>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+  {related_nav([("/belize-cave-tubing.html", "Belize Cave Tubing")])}
+</div></section>
+"""
+
+    if slug == "turtle-snorkel-and-island-time":
+        image, alt = SLUG_IMAGES.get(slug, (SNORKEL_IMG, SNORKEL_ALT))
+        return f"""
+<section class="section"><div class="wrap grid-2">
+  <div class="prose">
+    <p class="eyebrow">Shared excursion · Request to book</p>
+    <h2>Turtle Snorkel and Island Time</h2>
+    <p class="lead">Two snorkel sites and Caye Caulker island time on a shared marine day from Belize City.</p>
+    <p>{secondary}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{book}">Book now</a>
+      <a class="btn btn--outline" href="/belize-snorkeling-and-beach-excursions.html">Compare snorkel routes</a>
+    </div>
+  </div>{_img(image, alt)}
+</div></section>
+<section class="section section--alt"><div class="wrap">
+  {snapshot([("Duration", "About 5 hours"), ("Adults (12+)", "$115"), ("Children (6–11)", "$85"), ("Group", "Shared excursion"), ("Meeting", "~2 min from tender pier"), ("Booking", "Request to book")])}
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>Pricing and guests</h2>
+  <ul>
+    <li><strong>Adults (12+)</strong> — USD $115</li>
+    <li><strong>Children (6–11)</strong> — USD $85</li>
+    <li>Infants are not permitted. At least one adult is required</li>
+    <li>Children under 12 wear a life jacket and must be accompanied by an adult</li>
+    <li>Online requests accept up to 10 guests. For larger groups email <a href="mailto:{EMAIL}">{EMAIL}</a></li>
+  </ul>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+</div></section>
+<section class="section section--alt"><div class="wrap prose">
+  <h2>What is included</h2>
+  <ul>
+    <li>Two snorkel sites with about 90 minutes of water time</li>
+    <li>Caye Caulker island time</li>
+  </ul>
+  <p><strong>Not included:</strong> lunch. Wildlife sightings are never guaranteed.</p>
+  <h3>Access and fitness</h3>
+  <ul>
+    <li>Not wheelchair accessible</li>
+    <li>Guests must step into the vehicle, climb onto the boat and be able to swim</li>
+  </ul>
+  <p class="note">Meeting point is about a two-minute walk from the tender pier. Exact instructions are provided after confirmation.</p>
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>How booking works</h2>
+  {steps}
+  <p>{secondary}</p>
+  <h2>Cancellation</h2>
+  <p>{cancel}</p>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+  {related_nav([("/turtle-snorkel-and-island-time.html", "Turtle Snorkel and Island Time")])}
+</div></section>
+"""
+
+    if slug == "altun-ha-and-belize-city-overview":
+        image, alt = SLUG_IMAGES.get(slug, (ALTUN_HA_IMG, ALTUN_HA_ALT))
+        return f"""
+<section class="section"><div class="wrap grid-2">
+  <div class="prose">
+    <p class="eyebrow">Shared excursion · Request to book</p>
+    <h2>Altun-Ha and Belize City Overview</h2>
+    <p class="lead">A guided countryside drive to Altun Ha with a Belize City overview on a compact shared shore day.</p>
+    <p>{secondary}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{book}">Book now</a>
+      <a class="btn btn--outline" href="/belize-mayan-ruins-excursions.html">Compare Mayan routes</a>
+    </div>
+  </div>{_img(image, alt)}
+</div></section>
+<section class="section section--alt"><div class="wrap">
+  {snapshot([("Duration", "About 4 hours"), ("Adults (11+)", "$89"), ("Children (4–10)", "$79"), ("Group", "Shared excursion"), ("Meeting", "Cruise Ship Tender Pier"), ("Booking", "Request to book")])}
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>Pricing and guests</h2>
+  <ul>
+    <li><strong>Adults (11+)</strong> — USD $89</li>
+    <li><strong>Children (4–10)</strong> — USD $79</li>
+    <li>Under-4 places are not sold online. At least one adult is required</li>
+    <li>Not recommended for children aged 3 and under — email <a href="mailto:{EMAIL}">{EMAIL}</a> before booking if you need advice</li>
+    <li>Online requests accept up to 10 guests. For larger groups email <a href="mailto:{EMAIL}">{EMAIL}</a></li>
+  </ul>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+</div></section>
+<section class="section section--alt"><div class="wrap prose">
+  <h2>What is included</h2>
+  <ul>
+    <li>Guided countryside drive</li>
+    <li>Visit to Altun Ha</li>
+    <li>Belize City overview</li>
+    <li>Beverage</li>
+  </ul>
+  <h3>Terrain</h3>
+  <ul>
+    <li>Packed dirt and grass surfaces, inclines and uneven steps</li>
+    <li>Bumpy road sections on the journey</li>
+  </ul>
+  <p class="note">Meeting point: Cruise Ship Tender Pier. Exact instructions are provided after confirmation.</p>
+</div></section>
+<section class="section"><div class="wrap prose">
+  <h2>How booking works</h2>
+  {steps}
+  <p>{secondary}</p>
+  <h2>Cancellation</h2>
+  <p>{cancel}</p>
+  <p><a class="btn btn--primary" href="{book}">Book now</a></p>
+  {related_nav([("/altun-ha-and-belize-city-overview.html", "Altun-Ha and Belize City Overview")])}
+</div></section>
+"""
+    return None
+
+
 def tour_body(tour: dict, priority: str) -> str:
+    commercial = commercial_tour_body(tour)
+    if commercial:
+        return commercial
     title = escape(tour["title"])
     category = tour["category"]
     focus, expectation, lens = CATEGORY_GUIDANCE.get(
@@ -573,8 +763,8 @@ def trust_about_body() -> str:
     return f"""
 <section class="section"><div class="wrap prose">
   <p class="eyebrow">About</p><h2>Independent Belize cruise-day guidance</h2>
-  <p>{SITE} organises Belize City excursion evidence around tender logistics, listed duration, activity level, group format and theme. The aim is to make route differences understandable before passengers seek current operating details elsewhere.</p>
-  <p>We are not affiliated with any cruise line. This site does not present live inventory, prices, supplier endorsements or guaranteed outcomes.</p>
+  <p>{SITE} organises Belize City excursion evidence around tender logistics, listed duration, activity level, group format and theme. Selected excursions can be requested online; confirmation is emailed separately after availability is checked.</p>
+  <p>We are not affiliated with any cruise line. Payment on a request-to-book product is not an automatic booking confirmation.</p>
   <p><a class="btn btn--outline" href="/methodology/">Explore our methodology</a></p>
   {related_nav()}
 </div></section>
@@ -595,9 +785,13 @@ def trust_contact_body() -> str:
 def trust_privacy_body() -> str:
     return f"""
 <section class="section"><div class="wrap prose">
-  <p class="eyebrow">Privacy</p><h2>How basic site data is handled</h2>
-  <p>This is an informational website. If you email <a href="mailto:{EMAIL}">{EMAIL}</a>, your address and message are used to respond to the enquiry. We do not sell personal data.</p>
-  <p>Hosting and security services may process standard technical logs such as IP address, user agent and requested URL. Any future analytics or material change to this practice should be described on this page.</p>
+  <p class="eyebrow">Privacy</p><h2>How we handle personal data</h2>
+  <p>This site provides cruise planning information and, for selected excursions, a request-to-book journey.</p>
+  <p>If you email <a href="mailto:{EMAIL}">{EMAIL}</a>, your address and message are used to respond to the enquiry.</p>
+  <p>If you submit a booking request, we process the contact and passenger details you provide, together with payment information handled by Stripe, so we can receive your request, arrange the excursion and communicate about confirmation or refunds. We do not sell personal data.</p>
+  <p>Payment card data is handled by Stripe — we do not store full card numbers on this site.</p>
+  <p>Hosting and security services may process standard technical logs such as IP address, user agent and requested URL.</p>
+  <p>Questions about privacy may be sent to <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 </div></section>
 """
 
@@ -605,10 +799,13 @@ def trust_privacy_body() -> str:
 def trust_terms_body() -> str:
     return f"""
 <section class="section"><div class="wrap prose">
-  <p class="eyebrow">Terms</p><h2>Informational use</h2>
-  <p>Content on this site is general editorial information for planning a Belize cruise day. Tender operations, roads, weather, sea conditions and third-party route details can change.</p>
-  <p>Confirm all operational information with your cruise line and relevant providers. You remain responsible for choosing an appropriate plan and returning to your ship on time; this site does not guarantee any return outcome or third-party service.</p>
-  <p>{SITE} is not affiliated with any cruise line. Questions may be sent to <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+  <p class="eyebrow">Terms</p><h2>Planning information and booking requests</h2>
+  <p>Content on this site includes general editorial information for planning a Belize cruise day, plus request-to-book journeys for selected excursions.</p>
+  <p><strong>Payment is not confirmation.</strong> When you pay online for an approved excursion, you are submitting a booking request. We check availability and email confirmation separately. If we cannot confirm, you receive a full refund to your original payment method.</p>
+  <p><strong>Cancellation:</strong> free cancellation up to 14 days before your excursion; cancellations within 14 days of departure are non-refundable, except where we cannot confirm (full refund).</p>
+  <p>{SITE} arranges selected shore excursions for cruise passengers. We do not claim to operate the tours ourselves. Tender operations, roads, weather, sea conditions and third-party operating details can change.</p>
+  <p>You remain responsible for choosing an appropriate plan and returning to your ship on time. {SITE} is not affiliated with any cruise line.</p>
+  <p>Questions may be sent to <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 </div></section>
 """
 

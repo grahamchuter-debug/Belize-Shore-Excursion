@@ -28,6 +28,7 @@ else ok("manifest 42 protected routes");
 const banned = [
   /shoreexcursionsgroup/i,
   /\bSEG\b/,
+  /CABZTUBE|CABZTURTLE|CABZALTUN|SEG_MANUAL/i,
   /viator/i,
   /getyourguide/i,
   /cdn\.tailwindcss\.com/i,
@@ -35,7 +36,6 @@ const banned = [
   /fetch\(\s*['"]\/?partials\//i,
   /data-content=/i,
   /id="page-content"/i,
-  /Book now/i,
   /Check availability/i,
   /Secure your place/i,
   /Reserve your/i,
@@ -55,9 +55,13 @@ const banned = [
   /antigua-/i,
   /sk_live_/i,
   /sk_test_/i,
-  /stripe/i,
-  /resend/i,
 ];
+
+const COMMERCIAL = new Set([
+  "belize-cave-tubing.html",
+  "turtle-snorkel-and-island-time.html",
+  "altun-ha-and-belize-city-overview.html",
+]);
 
 const soft404Signals = [
   /Sorry, this page could not load/i,
@@ -88,6 +92,9 @@ for (const file of expected) {
   if (!html.includes("/js/nav.js")) fail(`${file} missing nav.js`);
   for (const re of banned) {
     if (re.test(html)) fail(`${file} banned pattern ${re}`);
+  }
+  if (!COMMERCIAL.has(file) && /Book now/i.test(html)) {
+    fail(`${file} must remain editorial (no Book now)`);
   }
   for (const re of soft404Signals) {
     if (re.test(html)) fail(`${file} soft-404 signal ${re}`);
@@ -209,6 +216,38 @@ const home = readFileSync(join(ROOT, "index.html"), "utf8");
 if (home.length < 8000) fail("homepage too thin — likely shell");
 if (!home.includes("<main")) fail("homepage missing main");
 ok("homepage inline content");
+
+// Phase 13D commercial checks
+for (const rel of COMMERCIAL) {
+  const html = readFileSync(join(ROOT, rel), "utf8");
+  const count = (html.match(/Book now/gi) || []).length;
+  if (count < 3) fail(`${rel} expected >=3 Book now CTAs, found ${count}`);
+  else ok(`${rel} Book now CTAs (${count})`);
+  if (!existsSync(join(ROOT, "book", rel.replace(".html", ""), "index.html"))) {
+    fail(`missing book route for ${rel}`);
+  } else ok(`book route ${rel}`);
+}
+
+const privateHtml = readFileSync(join(ROOT, "belize-private-tours.html"), "utf8");
+if (/Book now/i.test(privateHtml)) fail("private tours must remain editorial (no Book now)");
+else ok("private tours editorial only");
+
+const zipHtml = readFileSync(join(ROOT, "cave-tubing-and-zip-line-combo.html"), "utf8");
+if (/Book now/i.test(zipHtml)) fail("non-commercial cave+zip must remain editorial");
+else ok("cave+zip editorial only");
+
+const terms = readFileSync(join(ROOT, "terms/index.html"), "utf8");
+if (!/14 days/.test(terms)) fail("terms missing 14-day cancellation");
+else ok("terms 14-day cancellation");
+if (!/Payment is not confirmation/i.test(terms)) fail("terms missing payment≠confirmation");
+else ok("terms payment≠confirmation");
+
+const commercialCfg = readFileSync(join(ROOT, "js/commercial-config.js"), "utf8");
+if (!/PRODUCTION_READY_LOCKED/.test(commercialCfg)) fail("commercial-config missing PRODUCTION_READY_LOCKED");
+else ok("public lock PRODUCTION_READY_LOCKED");
+if (/CABZTUBE|CABZTURTLE|CABZALTUN|SEG_MANUAL|\bSEG\b/.test(commercialCfg)) {
+  fail("commercial-config leaked internal supply refs");
+} else ok("commercial-config no SEG leak");
 
 console.log(`\nRegression: ${passed} checks noted, ${failed} failures`);
 if (failed > 0) {

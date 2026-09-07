@@ -15,7 +15,7 @@ TOURS: list[dict] = [
     {
         "slug": "belize-cave-tubing",
         "title": "Belize Cave Tubing",
-        "seg_desc": "Tubing through Belize's unique underground cave system — a must-do tour with small group departures.",
+        "seg_desc": "Tubing through Belize's unique underground cave system on a shared shore excursion from the cruise tender pier.",
         "duration": "5 Hours",
         "activity": "Moderate",
         "size": "Standard",
@@ -26,7 +26,7 @@ TOURS: list[dict] = [
     {
         "slug": "turtle-snorkel-and-island-time",
         "title": "Turtle Snorkel and Island Time",
-        "seg_desc": "Swim with manatees, sting rays, turtles and more on this snorkeling tour off Caye Caulker Island.",
+        "seg_desc": "Snorkel at two sites with time at Caye Caulker — wildlife sightings are never guaranteed.",
         "duration": "5 Hours",
         "activity": "Moderate",
         "size": "Standard",

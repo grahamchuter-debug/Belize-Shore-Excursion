@@ -398,6 +398,27 @@ def build_tours() -> None:
             "private": "/belize-private-tours.html",
             "combo": "/best-belize-shore-excursions.html",
         }
+        commercial = {
+            "belize-cave-tubing",
+            "turtle-snorkel-and-island-time",
+            "altun-ha-and-belize-city-overview",
+        }
+        if slug in commercial:
+            title = f"{tour['title']} | Belize Shore Excursions"
+            desc = (
+                f"Request {tour['title']} online. Pay securely to request — confirmation is emailed separately. "
+                f"{tour['seg_desc']}"
+            )
+            cta_href = f"/book/{slug}/"
+            cta_label = "Book now"
+            lead = (
+                "Pay securely online to request your excursion. Your booking is confirmed separately "
+                "after availability is checked."
+            )
+        else:
+            cta_href = hub_map.get(tour["category"], "/best-belize-shore-excursions.html")
+            cta_label = "Explore related guides"
+            lead = tour["seg_desc"]
         write(
             ROOT / file,
             page_shell(
@@ -408,12 +429,12 @@ def build_tours() -> None:
                 nav_key="tour",
                 hero=hero_page(
                     title=tour["title"],
-                    lead=tour["seg_desc"],
+                    lead=lead,
                     image=img,
                     alt=alt,
                     crumb=f'<a href="/best-belize-shore-excursions.html">Excursions</a> · {tour["title"]}',
-                    cta_href=hub_map.get(tour["category"], "/best-belize-shore-excursions.html"),
-                    cta_label="Explore related guides",
+                    cta_href=cta_href,
+                    cta_label=cta_label,
                 ),
                 body=tour_body(tour, pri),
                 schema=schema,

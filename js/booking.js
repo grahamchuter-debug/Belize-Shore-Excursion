@@ -1,7 +1,7 @@
 /**
  * Belize request-to-book form (Phase 13D).
  * Server-side pricing is authoritative — client total is for review only.
- * Public gate: PRODUCTION_READY_LOCKED blocks Pay & request (no live money).
+ * Public gate: BOOKING_ENABLED unlocks Pay & request (Worker LIVE gates required too).
  */
 (function () {
   const form = document.getElementById("bz-booking-form");

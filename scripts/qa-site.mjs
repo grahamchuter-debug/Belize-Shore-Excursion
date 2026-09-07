@@ -243,8 +243,11 @@ if (!/Payment is not confirmation/i.test(terms)) fail("terms missing payment≠c
 else ok("terms payment≠confirmation");
 
 const commercialCfg = readFileSync(join(ROOT, "js/commercial-config.js"), "utf8");
-if (!/PRODUCTION_READY_LOCKED/.test(commercialCfg)) fail("commercial-config missing PRODUCTION_READY_LOCKED");
-else ok("public lock PRODUCTION_READY_LOCKED");
+if (!/BOOKING_ENABLED/.test(commercialCfg)) fail("commercial-config missing BOOKING_ENABLED");
+else ok("public unlock BOOKING_ENABLED");
+if (/defaultPublicBookingStatus:\s*"PRODUCTION_READY_LOCKED"/.test(commercialCfg)) {
+  fail("commercial-config still defaults to PRODUCTION_READY_LOCKED");
+}
 if (/CABZTUBE|CABZTURTLE|CABZALTUN|SEG_MANUAL|\bSEG\b/.test(commercialCfg)) {
   fail("commercial-config leaked internal supply refs");
 } else ok("commercial-config no SEG leak");

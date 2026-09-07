@@ -62,11 +62,11 @@ function jsonReq(url: string, body: unknown) {
   });
 }
 
-test("LIVE_PAYMENTS_CODE_ENABLED is false for Belize Phase 13D (locked)", () => {
-  assert.equal(LIVE_PAYMENTS_CODE_ENABLED, false);
+test("LIVE_PAYMENTS_CODE_ENABLED is true for Belize Phase 13G (live unlock)", () => {
+  assert.equal(LIVE_PAYMENTS_CODE_ENABLED, true);
 });
 
-test("live checkout blocked while code flag is false", () => {
+test("live checkout allowed when code flag, unlock phrase, and live secrets present", () => {
   const product = findBelizeBookingProduct("belize-cave-tubing")!;
   const block = liveCheckoutBlock(
     {
@@ -80,8 +80,7 @@ test("live checkout blocked while code flag is false", () => {
     },
     product,
   );
-  assert.ok(block);
-  assert.equal(block!.code, "LIVE_PAYMENTS_BLOCKED");
+  assert.equal(block, null);
 });
 
 test("BOOKINGS_ENABLED=false kill switch", () => {
@@ -334,16 +333,16 @@ test("internal product notes keep SEG_MANUAL codes off public paths", () => {
   }
 });
 
-test("production gates remain locked in live-gate source", () => {
+test("production live code flag enabled in live-gate source", () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const src = readFileSync(join(here, "live-gate.ts"), "utf8");
-  assert.match(src, /LIVE_PAYMENTS_CODE_ENABLED\s*=\s*false/);
+  assert.match(src, /LIVE_PAYMENTS_CODE_ENABLED\s*=\s*true/);
 });
 
-test("commercial-config defaults to PRODUCTION_READY_LOCKED", () => {
+test("commercial-config defaults to BOOKING_ENABLED", () => {
   const root = join(dirname(fileURLToPath(import.meta.url)), "../../..");
   const text = readFileSync(join(root, "js/commercial-config.js"), "utf8");
-  assert.match(text, /defaultPublicBookingStatus:\s*"PRODUCTION_READY_LOCKED"/);
-  assert.match(text, /publicBookingStatus:\s*"PRODUCTION_READY_LOCKED"/);
+  assert.match(text, /defaultPublicBookingStatus:\s*"BOOKING_ENABLED"/);
+  assert.match(text, /publicBookingStatus:\s*"BOOKING_ENABLED"/);
   assert.doesNotMatch(text, /CABZTUBE|CABZTURTLE|CABZALTUN|SEG_MANUAL|\bSEG\b/);
 });

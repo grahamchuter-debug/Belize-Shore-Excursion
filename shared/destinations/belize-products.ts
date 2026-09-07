@@ -79,7 +79,7 @@ const SHARED_PENDING = [
   "Fulfilment: Graham places corresponding booking via established SEG affiliate / white-label route (INTERNAL).",
   "Payment received ≠ excursion confirmed.",
   "Online max 10 guests per booking (Graham online limit — not supplier capacity).",
-  "LIVE_PAYMENTS_CODE_ENABLED false — Phase 13D production locked.",
+  "LIVE_PAYMENTS_CODE_ENABLED true from Phase 13G Graham unlock (request-to-book).",
   "commercial_status=SEG_FULFILMENT_READY · fulfilment_mode=SEG_MANUAL · supplier=UNKNOWN · direct_supplier_status=NOT_CONTACTED · net_cost=UNKNOWN · margin=UNKNOWN",
 ] as const;
 

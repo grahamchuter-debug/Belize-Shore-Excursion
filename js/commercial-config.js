@@ -10,8 +10,8 @@ window.BZ_COMMERCIAL = {
   bookingsApiUrl: "https://belize-bookings-prod.dark-violet-8d91.workers.dev",
   email: "hello@belizeshoreexcursion.com",
   siteName: "Belize Shore Excursions",
-  /** Phase 13D — production locked; no live card charges. */
-  defaultPublicBookingStatus: "PRODUCTION_READY_LOCKED",
+  /** Phase 13G — Graham-authorised live request-to-book unlock. */
+  defaultPublicBookingStatus: "BOOKING_ENABLED",
   cancellation:
     "Free cancellation up to 14 days before your excursion. Cancellations made within 14 days of departure are non-refundable. If we are unable to confirm your excursion after payment, you will receive a full refund to your original payment method.",
   paymentNotConfirmation:
@@ -38,7 +38,7 @@ window.BZ_COMMERCIAL = {
       durationLabel: "About 5 hours",
       maxGuests: 10,
       requiresEligibilityAck: true,
-      publicBookingStatus: "PRODUCTION_READY_LOCKED",
+      publicBookingStatus: "BOOKING_ENABLED",
       displayPrice: "$86 per eligible guest",
     },
     "turtle-snorkel-and-island-time": {
@@ -55,7 +55,7 @@ window.BZ_COMMERCIAL = {
       guestModel: "adult_child",
       durationLabel: "About 5 hours",
       maxGuests: 10,
-      publicBookingStatus: "PRODUCTION_READY_LOCKED",
+      publicBookingStatus: "BOOKING_ENABLED",
       displayPrice: "Adults (12+) $115 · Children (6–11) $85",
     },
     "altun-ha-and-belize-city-overview": {
@@ -72,7 +72,7 @@ window.BZ_COMMERCIAL = {
       guestModel: "adult_child",
       durationLabel: "About 4 hours",
       maxGuests: 10,
-      publicBookingStatus: "PRODUCTION_READY_LOCKED",
+      publicBookingStatus: "BOOKING_ENABLED",
       displayPrice: "Adults (11+) $89 · Children (4–10) $79",
     },
   },

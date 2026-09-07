@@ -5,8 +5,8 @@ import type { BookableProductConfig } from "../../../shared/world-booking/types"
  * Live charging requires this code flag AND env.LIVE_PAYMENTS_UNLOCK.
  * A single environment variable must never enable live cards.
  */
-/** Phase 13D: production locked — no live money until Graham unlock. */
-export const LIVE_PAYMENTS_CODE_ENABLED = false;
+/** Phase 13G: Graham-authorised live request-to-book unlock. */
+export const LIVE_PAYMENTS_CODE_ENABLED = true;
 
 export const LIVE_UNLOCK_PHRASE = "BELIZE_LIVE_UNLOCK";
 

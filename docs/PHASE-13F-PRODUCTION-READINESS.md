@@ -80,4 +80,4 @@ TEST Worker secrets retained. TEST D1 Phase 13E proof rows left intact (not dest
 
 ## Recommended next
 
-**PHASE 13G — CONTROLLED PRODUCTION UNLOCK** (only when Graham authorises flipping the three gates and accepting first live traffic).
+**DONE — Phase 13G** unlocked live request-to-book and proved one unpaid LIVE Checkout (`W2BZE-RFYJJTYU`). See `PHASE-13G-LIVE-UNLOCK.md`.

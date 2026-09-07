@@ -58,8 +58,11 @@ export function validateCustomer(customer: BookingCustomer): string | null {
   return null;
 }
 
-export function validateCruise(cruise: BookingCruiseContext): string | null {
+export function validateCruise(cruise: BookingCruiseContext, now = new Date()): string | null {
   if (!ISO_DATE.test(cruise.date)) return "Choose your cruise date.";
+  if (cruise.date < todayIsoLocal(now)) {
+    return "Please choose today or a future cruise date.";
+  }
   if (!cruise.shipName.trim()) return "Tell us which ship you are arriving on.";
   return null;
 }

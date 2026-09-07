@@ -104,6 +104,16 @@ test("customer and cruise validation", () => {
       scheduleMatched: false,
     }),
   );
+  assert.ok(
+    validateCruise({
+      date: "2020-01-01",
+      shipName: "Celebrity Beyond",
+      shipSlug: "not-listed",
+      cruiseLine: "",
+      isCustomShip: true,
+      scheduleMatched: false,
+    }),
+  );
   assert.equal(
     validateCruise({
       date: "2026-12-15",

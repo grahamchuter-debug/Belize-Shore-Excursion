@@ -1,6 +1,6 @@
 # Phase 13D — Request-to-book (Belize)
 
-Status: **13D COMPLETE** — architecture implemented; production remains locked.
+Status: **13D COMPLETE / 13E COMPLETE** — sandbox proven; production remains locked.
 
 ## What was shipped (13D)
 
@@ -23,7 +23,8 @@ Status: **13D COMPLETE** — architecture implemented; production remains locked
 | Unlock phrase | `BELIZE_LIVE_UNLOCK` (unused while code flag false) |
 | Gates | `LIVE_PAYMENTS_CODE_ENABLED=false` · prod `BOOKINGS_ENABLED=false` · `EMAIL_SENDING_ENABLED=false` |
 | Public lock | `PRODUCTION_READY_LOCKED` — journey visible; Pay disabled |
-| Automated tests | **59/59 pass** |
+| Automated tests | **60/60 pass** (after 13E) |
+| Phase 13E | See `PHASE-13E-TEST-PROOF.md` — sandbox lifecycle GREEN |
 
 ## Public lock behaviour
 
@@ -35,4 +36,4 @@ Status: **13D COMPLETE** — architecture implemented; production remains locked
 
 ## Recommended next
 
-**PHASE 13E — TEST / SANDBOX PROOF** (Stripe TEST + TEST Worker secrets + webhook + operator confirm/decline proofs)
+**PHASE 13F — PRODUCTION READINESS / LIVE SECRETS + WEBHOOK / REMAIN LOCKED**

@@ -182,8 +182,15 @@ test("invalid email / date / missing fields", () => {
   const product = findBelizeBookingProduct("belize-cave-tubing")!;
   assert.throws(() => calculateBookingQuote(product, { adults: 0, children: 0, infants: 0 }));
   assert.ok(validateCruise({ date: "nope", shipName: "Ship", shipSlug: "s", cruiseLine: "", isCustomShip: true, scheduleMatched: false }));
+  assert.ok(validateCruise({ date: "2020-01-01", shipName: "Ship", shipSlug: "s", cruiseLine: "", isCustomShip: true, scheduleMatched: false }));
   assert.ok(validateCustomer({ name: "Alex Traveller", email: "bad", phone: "+447700900123" }));
   assert.equal(validateCustomer({ name: "Alex Traveller", email: "alex@example.com", phone: "+447700900123" }), null);
+});
+
+test("ops request heading is Belize not St Lucia", () => {
+  const src = readFileSync(new URL("./notify.ts", import.meta.url), "utf8");
+  assert.match(src, /NEW BELIZE BOOKING REQUEST/);
+  assert.doesNotMatch(src, /NEW ST LUCIA BOOKING REQUEST/);
 });
 
 test("missing customer fields rejected by preview Worker", async () => {
